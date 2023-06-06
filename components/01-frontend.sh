@@ -4,7 +4,7 @@ COMPONENT="frontend"
 LOGFILE="/tmp/${COMPONENT}.log"
 ID= $(id -u)
 
-echo "This is ${COMPONENT} component"
+echo -e "\e[35m ******* Setup ${COMPONENT} Service ******* \e[0m"
 
 if [$ID -ne 0] ; then
     echo -e "\e[31m This script is expected to be run by a root user or with a sudo privillege \e[0m"
@@ -46,3 +46,4 @@ systemctl enable nginx &>> ${LOGFILE}
 systemctl restart nginx &>> ${LOGFILE}
 stat $?
 
+echo -e "\e[35m ******* ${COMPONENT} Service setup completed successfully ******* \e[0m"
