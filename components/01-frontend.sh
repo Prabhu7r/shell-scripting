@@ -1,10 +1,10 @@
 #!/bin/bash
 
-echo "This is ${COMPONENT} component"
-
 COMPONENT="frontend"
 LOGFILE="/tmp/${COMPONENT}.log"
 ID= $(id -u)
+
+echo "This is ${COMPONENT} component"
 
 if [$ID -ne 0] ; then
     echo -e "\e[31m This script is expected to be run by a root user or with a sudo privillege \e[0m"
