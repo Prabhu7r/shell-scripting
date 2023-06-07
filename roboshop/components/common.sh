@@ -58,7 +58,7 @@ INSTALL_DEPENDENCY() {
 UPDATE_CONFIG() {
 
     echo -n "Update ${COMPONENT} config :"
-    sed -i -e 'MONGO_DNSNAME/mongodb.${APPUSER}.internal/' -e 'MONGO_ENDPOINT/mongodb.${APPUSER}.internal/' -e 'REDIS_ENDPOINT/redis.${APPUSER}.internal/' -e 'CATALOGUE_ENDPOINT/catalogue.${APPUSER}.internal/' -e 'REDIS_ENDPOINT/redis.${APPUSER}.internal/' systemd.servce
+    sed -i -e 'MONGO_DNSNAME/mongodb.${APPUSER}.internal/' -e 'MONGO_ENDPOINT/mongodb.${APPUSER}.internal/' -e 'REDIS_ENDPOINT/redis.${APPUSER}.internal/' -e 'CATALOGUE_ENDPOINT/catalogue.${APPUSER}.internal/' -e 'REDIS_ENDPOINT/redis.${APPUSER}.internal/' -e 'CARTENDPOINT/cart.${APPUSER}.internal/' -e 'DBHOST/mysql.${APPUSER}.internal/' systemd.servce
     mv /home/${APPUSER}/${COMPONENT}/systemd.service /etc/systemd/system/${COMPONENT}.service
     stat $?
 
@@ -67,8 +67,6 @@ UPDATE_CONFIG() {
     systemctl enable ${COMPONENT} &>> ${LOGFILE}
     systemctl restart ${COMPONENT} &>> ${LOGFILE}
     stat $?
-
-    echo -e "\e[35m ******* ${COMPONENT} Service setup completed successfully ******* \e[0m"
 
 }
 
@@ -91,5 +89,30 @@ NODEJS() {
 
     UPDATE_CONFIG           #Update and configure the service
 
+    echo -e "\e[35m ******* ${COMPONENT} Service setup completed successfully ******* \e[0m"
+
 }
 
+JAVA() {
+
+    echo -e "\e[35m ******* Setup ${COMPONENT} Service ******* \e[0m"
+
+    echo -n "Install the Maven and Java :"
+    yum install maven -y
+    stat $?
+
+    SETUP_APPUSER           #create service account
+
+    DOWNLOAD                #Download and extract component
+
+    echo -n "Build ${COMPONENT} package artifact :"
+    cd ${COMPONENT}
+    mvn clean package
+    mv target/${COMPONENT}-1.0.jar ${COMPONENT}.jar
+    stat $?
+
+    UPDATE_CONFIG           #Update and configure the service
+
+    echo -e "\e[35m ******* ${COMPONENT} Service setup completed successfully ******* \e[0m"
+    
+}

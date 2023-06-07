@@ -1,5 +1,7 @@
-#! /bin/bash
+#!/bin/bash
 
 COMPONENT="shipping"
 
-echo "This is ${COMPONENT} component"
+source components/common.sh
+
+JAVA
