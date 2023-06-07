@@ -41,7 +41,14 @@ rm -rf ${COMPONENT}-main README.md
 mv localhost.conf /etc/nginx/default.d/roboshop.conf &>> ${LOGFILE}
 stat $?
 
+echo -n "Update the ${COMPONENT} proxy information :"
+for component in catalogue ; do
+sed -i -e '/s${component}/slocalhost/${component}.roboshop.internal/' /etc/nginx/default.d/roboshop.conf
+done
+stat $?
+
 echo -n "Start the ${COMPONENT} service :"
+systemctl daemon-reload  &>> ${LOGFILE}
 systemctl enable nginx &>> ${LOGFILE}
 systemctl restart nginx &>> ${LOGFILE}
 stat $?
