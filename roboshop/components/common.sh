@@ -65,6 +65,17 @@ BUILD_JAR() {
 
 }
 
+BUILD_GO() {
+
+    echo -n "Build ${COMPONENT} service :"
+    cd ${COMPONENT}
+    go mod init ${COMPONENT}
+    go get
+    go build
+    stat $?
+
+}
+
 UPDATE_CONFIG() {
 
     echo -n "Update ${COMPONENT} config :"
@@ -147,3 +158,24 @@ PYTHON() {
     echo -e "\e[35m ******* ${COMPONENT} Service setup completed successfully ******* \e[0m"
 
 }
+
+GO() {
+
+    echo -e "\e[35m ******* Setup ${COMPONENT} Service ******* \e[0m"
+
+    echo -n "Install the Maven and Java :"
+    yum install golang -y   &>> ${LOGFILE}
+    stat $?
+
+    SETUP_APPUSER           #create service account
+
+    DOWNLOAD                #Download and extract component
+
+    BUILD_GO                #Build dispatch component
+
+    UPDATE_CONFIG           #Update and configure the service
+
+    echo -e "\e[35m ******* ${COMPONENT} Service setup completed successfully ******* \e[0m"
+
+}
+

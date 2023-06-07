@@ -1,5 +1,7 @@
-#! /bin/bash
+#!/bin/bash
 
 COMPONENT="dispatch"
 
-echo "This is ${COMPONENT} component"
+source components/common.sh
+
+GO
