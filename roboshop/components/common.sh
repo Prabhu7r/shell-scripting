@@ -46,7 +46,7 @@ DOWNLOAD() {
 
 }
 
-INSTALL_DEPENDENCY() {
+NPM_DEPENDENCY() {
 
     echo -n "Download the nodejs dependencies :"
     cd /home/${APPUSER}/${COMPONENT}
@@ -55,17 +55,27 @@ INSTALL_DEPENDENCY() {
 
 }
 
+BUILD_JAR() {
+
+    echo -n "Build ${COMPONENT} package artifact(JAR) :"
+    cd ${COMPONENT}
+    mvn clean package
+    mv target/${COMPONENT}-1.0.jar ${COMPONENT}.jar &>> ${LOGFILE}
+    stat $?
+
+}
+
 UPDATE_CONFIG() {
 
     echo -n "Update ${COMPONENT} config :"
-    sed -i -e 'MONGO_DNSNAME/mongodb.${APPUSER}.internal/' -e 'MONGO_ENDPOINT/mongodb.${APPUSER}.internal/' -e 'REDIS_ENDPOINT/redis.${APPUSER}.internal/' -e 'CATALOGUE_ENDPOINT/catalogue.${APPUSER}.internal/' -e 'REDIS_ENDPOINT/redis.${APPUSER}.internal/' -e 'CARTENDPOINT/cart.${APPUSER}.internal/' -e 'DBHOST/mysql.${APPUSER}.internal/' systemd.servce
-    mv /home/${APPUSER}/${COMPONENT}/systemd.service /etc/systemd/system/${COMPONENT}.service
+    sed -i -e 'MONGO_DNSNAME/mongodb.${APPUSER}.internal/' -e 'MONGO_ENDPOINT/mongodb.${APPUSER}.internal/' -e 'REDIS_ENDPOINT/redis.${APPUSER}.internal/' -e 'CATALOGUE_ENDPOINT/catalogue.${APPUSER}.internal/' -e 'REDIS_ENDPOINT/redis.${APPUSER}.internal/' -e 'CARTENDPOINT/cart.${APPUSER}.internal/' -e 'DBHOST/mysql.${APPUSER}.internal/' -e 'USERHOST/user.${APPUSER}.internal/' -e 'AMQPHOST/rabbitmq.${APPUSER}.internal/' systemd.servce
+    mv /home/${APPUSER}/${COMPONENT}/systemd.service /etc/systemd/system/${COMPONENT}.service &>> ${LOGFILE}
     stat $?
 
     echo -n "Start the ${COMPONENT} service :"
-    systemctl daemon-reload  &>> ${LOGFILE}
-    systemctl enable ${COMPONENT} &>> ${LOGFILE}
-    systemctl restart ${COMPONENT} &>> ${LOGFILE}
+    systemctl daemon-reload         &>> ${LOGFILE}
+    systemctl enable ${COMPONENT}   &>> ${LOGFILE}
+    systemctl restart ${COMPONENT}  &>> ${LOGFILE}
     stat $?
 
 }
@@ -78,14 +88,14 @@ NODEJS() {
     stat $?
 
     echo -n "Install the nodejs :"
-    yum install nodejs -y
+    yum install nodejs -y &>> ${LOGFILE}
     stat $?
 
     SETUP_APPUSER           #create service account
 
     DOWNLOAD                #Download and extract component
 
-    INSTALL_DEPENDENCY      #Install npm dependencies
+    NPM_DEPENDENCY          #Install npm dependencies
 
     UPDATE_CONFIG           #Update and configure the service
 
@@ -98,21 +108,42 @@ JAVA() {
     echo -e "\e[35m ******* Setup ${COMPONENT} Service ******* \e[0m"
 
     echo -n "Install the Maven and Java :"
-    yum install maven -y
+    yum install maven -y    &>> ${LOGFILE}
     stat $?
 
     SETUP_APPUSER           #create service account
 
     DOWNLOAD                #Download and extract component
 
-    echo -n "Build ${COMPONENT} package artifact :"
-    cd ${COMPONENT}
-    mvn clean package
-    mv target/${COMPONENT}-1.0.jar ${COMPONENT}.jar
-    stat $?
+    BUILD_JAR               #Build artifact(JAR)
 
     UPDATE_CONFIG           #Update and configure the service
 
     echo -e "\e[35m ******* ${COMPONENT} Service setup completed successfully ******* \e[0m"
-    
+
+}
+
+PYTHON() {
+
+    echo -e "\e[35m ******* Setup ${COMPONENT} Service ******* \e[0m"
+
+    echo -n "Install the Maven and Java :"
+    yum install python36 gcc python3-devel -y   &>> ${LOGFILE}
+    stat $?
+
+    SETUP_APPUSER           #create service account
+
+    DOWNLOAD                #Download and extract component
+
+    echo -n "Install ${COMPONENT} dependency :"
+    cd /home/${APPUSER}/${COMPONENT} 
+    pip3 install -r requirements.txt    &>> ${LOGFILE}
+    stat $?
+
+    #Step-5 PENDING
+
+    UPDATE_CONFIG           #Update and configure the service
+
+    echo -e "\e[35m ******* ${COMPONENT} Service setup completed successfully ******* \e[0m"
+
 }

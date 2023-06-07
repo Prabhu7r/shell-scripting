@@ -28,15 +28,15 @@ mv localhost.conf /etc/nginx/default.d/${APPUSER}.conf &>> ${LOGFILE}
 stat $?
 
 echo -n "Update the ${COMPONENT} proxy information :"
-for component in catalogue user cart ; do
+for component in catalogue user cart shipping payment ; do
 sed -i -e '/s${component}/slocalhost/${component}.${APPUSER}.internal/' /etc/nginx/default.d/roboshop.conf
 done
 stat $?
 
 echo -n "Start the ${COMPONENT} service :"
 systemctl daemon-reload  &>> ${LOGFILE}
-systemctl enable nginx &>> ${LOGFILE}
-systemctl restart nginx &>> ${LOGFILE}
+systemctl enable nginx   &>> ${LOGFILE}
+systemctl restart nginx  &>> ${LOGFILE}
 stat $?
 
 echo -e "\e[35m ******* ${COMPONENT} Service setup completed successfully ******* \e[0m"
