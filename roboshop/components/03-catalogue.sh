@@ -38,7 +38,7 @@ npm install  &>> ${LOGFILE}
 stat $?
 
 echo -n "Update ${COMPONENT} config :"
-sed -i -e 'MONGO_DNSNAME/${COMPONENT}.${APPUSER}.internal/' systemd.servce
+sed -i -e 'MONGO_DNSNAME/mongodb.${APPUSER}.internal/' systemd.servce
 mv /home/${APPUSER}/${COMPONENT}/systemd.service /etc/systemd/system/${COMPONENT}.service
 stat $?
 
