@@ -10,7 +10,7 @@ echo -n "Configure the ${COMPONENT} repos :"
 curl -L https://raw.githubusercontent.com/stans-robot-project/${COMPONENT}/main/${COMPONENT}.repo -o /etc/yum.repos.d/${COMPONENT}.repo
 stat $?
 
-echo -n "Install the nodejs :"
+echo -n "Install the ${COMPONENT} :"
 yum install ${COMPONENT}-6.2.11 -y &>> ${LOGFILE}
 stat $?
 
