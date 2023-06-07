@@ -28,7 +28,7 @@ mv localhost.conf /etc/nginx/default.d/${APPUSER}.conf &>> ${LOGFILE}
 stat $?
 
 echo -n "Update the ${COMPONENT} proxy information :"
-for component in catalogue user ; do
+for component in catalogue user cart ; do
 sed -i -e '/s${component}/slocalhost/${component}.${APPUSER}.internal/' /etc/nginx/default.d/roboshop.conf
 done
 stat $?
