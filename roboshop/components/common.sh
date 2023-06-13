@@ -152,6 +152,11 @@ PYTHON() {
     stat $?
 
     #Step-5 PENDING
+    U_ID=$(id -u ${APPUSER})
+    G_ID=$(id -u ${APPUSER})
+
+    echo -n "Update the uid and gid :"
+    
 
     UPDATE_CONFIG           #Update and configure the service
 
