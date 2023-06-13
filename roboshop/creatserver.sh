@@ -11,17 +11,6 @@ if [ -z "$1" ] ; then
     exit 1
 fi
 
-if [ "$1" -eq "all" ] ; then
-    echo -e "\e[35m ***** Creating Instance for ALL COMPONENTS ***** \e[0m"
-    for component in frontend mongodb catalogue redis user cart mysql shipping rabbitmq payment ; do
-        COMPOMENT=$component
-        create_ec2
-    done
-
-else
-    create_ec2
-fi
-
 create_ec2() {
     
     echo -e "\e[35m AMI ID is: ${AMI_ID}  \e[0m"
@@ -41,4 +30,13 @@ create_ec2() {
 
 }
 
-
+if [ "$1" -eq "all" ] ; then
+    echo -e "\e[35m ***** Creating Instance for ALL COMPONENTS ***** \e[0m"
+    for component in frontend mongodb catalogue redis user cart mysql shipping rabbitmq payment ; do
+        COMPOMENT=$component
+        create_ec2
+    done
+    echo -e "\e[35m ***** Completed Instance creation for ALL COMPONENTS ***** \e[0m"
+else
+    create_ec2
+fi
