@@ -5,13 +5,13 @@ SG_ID=$(aws ec2 describe-security-groups --filters "Name=group-name,Values=b54-a
 COMPONENT=$1
 HOSTED_ZONEID="Z102247911LNKQBB5YPCU"
 
-if [-z "$1"] ; then
+if [ -z "$1" ] ; then
     echo -e "\e[31m MISSING COMPONENT NAME   \e[0m"
     echo -e "\e\t\t[31m E.g. bash creatserver.sh component_name   \e[0m"
     exit 1
 fi
 
-if ["$1" -eq "all"] ; then
+if [ "$1" -eq "all" ] ; then
     echo -e "\e[35m ***** Creating Instance for ALL COMPONENTS ***** \e[0m"
     for component in frontend mongodb catalogue redis user cart mysql shipping rabbitmq payment ; do
         COMPOMENT=$component
