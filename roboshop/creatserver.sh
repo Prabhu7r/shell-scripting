@@ -23,8 +23,8 @@ create_ec2() {
 
     echo -e "\e[35m ***** Create DNS record for ${COMPONENT} component ***** \e[0m"
 
-    sed -e "s/COMPOMENT/${COMPONENT}/" -e "s/IPADDRESS/${IP_ADDRESS}/" route53.json > /tem/record.json
-    aws route53 change-resource-record-sets --hosted-zone-id ${HOSTED_ZONEID} --change-batch file:///tem/record.json 
+    sed -e "s/COMPOMENT/${COMPONENT}/" -e "s/IPADDRESS/${IP_ADDRESS}/" route53.json > /tmp/record.json
+    aws route53 change-resource-record-sets --hosted-zone-id ${HOSTED_ZONEID} --change-batch file:///tmp/record.json 
 
     echo -e "\e[35m ***** Completed Instance creation for ${COMPONENT} component ***** \e[0m"
 
