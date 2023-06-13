@@ -6,9 +6,9 @@ COMPONENT=$1
 ENV=$2
 HOSTED_ZONEID="Z102247911LNKQBB5YPCU"
 
-if [ -z "$1" ] ; then
-    echo -e "\e[31m MISSING COMPONENT NAME   \e[0m"
-    echo -e "\e\t\t[31m E.g. bash creatserver.sh component_name   \e[0m"
+if [ -z "$1" ] || [ -z "$2" ] ; then
+    echo -e "\e[31m MISSING COMPONENT or ENVIRONMENT NAME   \e[0m"
+    echo -e "\e\t\t[31m E.g. bash creatserver.sh component_name dev \e[0m"
     exit 1
 fi
 
